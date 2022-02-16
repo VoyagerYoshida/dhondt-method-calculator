@@ -22,9 +22,13 @@ def analyze():
             searts_numbers.append(int(num_searts))
             votes.append(int("".join(vote.split(','))))
 
-    print(party_names)
-    print(searts_numbers)
-    print(votes)
+    expected_party = []
+    for _ in range(max_searts-sum(searts_numbers)):
+        next_index = sorted(zip(range(num_parties), [votes[j]/(searts_numbers[j]+1) for j in range(num_parties)]), key=lambda x: -x[1])[0][0]
+        expected_party.append(party_names[next_index])
+        searts_numbers[next_index] += 1
+
+    print(expected_party)
 
 
 if __name__ == '__main__':
