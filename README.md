@@ -8,6 +8,7 @@
 $ make setup/network
 $ make remote/up
 $ make host/build host/run
+(host.container):/workspace#
 ```
 
 ## How to use 

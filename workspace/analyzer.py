@@ -24,7 +24,7 @@ def analyze():
 
     expected_party = []
     for _ in range(max_searts-sum(searts_numbers)):
-        next_index = sorted(zip(range(num_parties), [votes[j]/(searts_numbers[j]+1) for j in range(num_parties)]), key=lambda x: -x[1])[0][0]
+        next_index = sorted(enumerate([votes[i]/(searts_numbers[i]+1) for i in range(num_parties)]), key=lambda x: -x[1])[0][0]
         expected_party.append(party_names[next_index])
         searts_numbers[next_index] += 1
 

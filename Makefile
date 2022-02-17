@@ -1,9 +1,5 @@
-PWD := $(shell pwd)
-NETWORK_NAME:=selenium_network
-REMOTE_CONTAINER_NAME:=remote.selenium
-HOST_IMAGE_NAME:=voyagerwy130/selenium
-HOST_CONTAINER_NAME:=host.selenium
-HOST_WORKING_DIR:=/workspace/
+ENVFILE:=.env
+include $(ENVFILE)
 
 
 .PHONY: setup/network
@@ -13,12 +9,12 @@ setup/network:
 
 .PHONY: remote/up
 remote/up:
-	@docker run -d \
-		-p 4444:4444 \
+	@docker run --rm -d \
+		-p $(REMOTE_PORT):$(REMOTE_PORT) \
 		-v /dev/shm:/dev/shm \
 		--net $(NETWORK_NAME) \
 		--name $(REMOTE_CONTAINER_NAME) \
-		selenium/standalone-chrome
+		$(REMOTE_IMAGE_NAME)
 
 .PHONY: remote/down
 remote/down:
@@ -32,8 +28,8 @@ host/build:
 .PHONY: host/run
 host/run:
 	@docker run --rm -it \
-		-p 2222:8888 \
-		-v $(PWD)/workspace/:$(HOST_WORKING_DIR) \
-        --net $(NETWORK_NAME) \
+		-v $(shell pwd)/workspace:/workspace \
+		--net $(NETWORK_NAME) \
+		--env-file $(ENVFILE) \
 		--name $(HOST_CONTAINER_NAME) \
 		$(HOST_IMAGE_NAME) /bin/bash
